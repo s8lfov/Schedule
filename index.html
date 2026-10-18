@@ -4,10 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Расписание ИВ 234</title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236d28d9'/%3E%3Ctext x='50' y='46' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3EIV%3C/text%3E%3Ctext x='50' y='84' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3E234%3C/text%3E%3C/svg%3E">
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--text:#1d2433;--muted:#6b7385;--line:#e2e5ee;--accent:#6d28d9;--hl:#f1eafd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161c;--card:#1d2029;--text:#eceef4;--muted:#9aa1b3;--line:#313644;--accent:#8b5cf6;--hl:#2d2442}}
@@ -17,7 +14,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:20px 12px 40px}
 .wrap{max-width:1200px;margin:0 auto}
 .hero{text-align:center;margin:10px 0 24px}
-.hero small{color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.hero small{display:block;margin:4px 0 8px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-size:13px}
 .hero .num{font-size:clamp(64px,14vw,120px);font-weight:800;line-height:1;color:var(--accent)}
 .hero .lbl{font-size:clamp(18px,3vw,26px);font-weight:600}
 .hero .sub{color:var(--muted);margin-top:6px;font-size:14px}
@@ -56,8 +53,8 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <body>
 <div class="wrap">
   <div class="hero">
-    <small>Идёт учебная неделя</small>
     <div class="num" id="num">–</div>
+    <small>Учебная неделя</small>
     <div class="lbl" id="range"></div>
     <div class="sub" id="sub"></div>
   </div>
@@ -123,7 +120,9 @@ const now=new Date();
 const year=2026; // расписание действует только в 2026 году
 const sep1=new Date(year,8,1);
 const mon1=utc(sep1)-((sep1.getDay()+6)%7)*DAY; // понедельник недели с 1 сентября
-const realWeek=Math.floor((utc(now)-mon1)/DAY/7)+1;
+const dow=(now.getDay()+6)%7; // 0=Пн … 6=Вс
+const effDay=utc(now)+(dow>=5?(7-dow)*DAY:0); // в выходные — уже следующая неделя
+const realWeek=Math.floor((effDay-mon1)/DAY/7)+1;
 const todayIdx=(now.getDay()+6)%7; // 0=Пн … 6=Вс
 const START=Date.UTC(2026,8,1), END=Date.UTC(2026,11,31); // период: 1 сентября – 31 декабря 2026
 const maxWeek=Math.floor((END-mon1)/DAY/7)+1; // последняя неделя, начинающаяся в 2026
@@ -134,7 +133,7 @@ let week=home;
 const fmt=t=>new Date(t).toLocaleDateString("ru-RU",{day:"numeric",month:"long",timeZone:"UTC"});
 
 function render(){
-  const start=mon1+(week-1)*7*DAY, end=start+6*DAY;
+  const start=mon1+(week-1)*7*DAY, end=start+4*DAY; // только будни (Пн–Пт)
   document.getElementById("num").textContent=week;
   document.getElementById("prev").disabled=week<=1;
   document.getElementById("next").disabled=week>=maxWeek;
@@ -154,7 +153,7 @@ function render(){
       const dayT=start+d*DAY, off=dayT<START||dayT>END;
       const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
       h+=`<td class="${isCur&&d===todayIdx?"today":""}${off?" off":""}">`+(ls.length?ls.map(l=>
-        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
+        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">ауд. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
     }
     h+="</tr>";
   }
