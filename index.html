@@ -48,6 +48,28 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 .bt tr.long td{background:#f5e663;color:#222}
 .bt tr.cur td{outline:2px solid var(--accent);outline-offset:-2px;font-weight:700}
 .bh{margin:6px 0;font-weight:700;color:var(--accent)}
+#cards{display:none}
+.dc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.dc.today{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.dc.off{opacity:.55}
+.dh2{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-size:17px}
+.dh2 span{color:var(--muted);font-size:13px}
+.dc.today .dh2 b{color:var(--accent)}
+.cp{padding:8px 0;border-top:1px solid var(--line)}
+.ct{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+.ct b{color:var(--text)}
+@media (max-width:760px){
+ body{padding:12px 10px 32px}
+ .scroll{display:none}
+ #cards{display:block}
+ .hero{margin:4px 0 16px}
+ .nav button{flex:1 1 30%;padding:11px 8px}
+ #bells{flex-basis:100%}
+ dialog{padding:12px;width:96vw}
+ .bt td,.bt th{padding:6px 5px;font-size:12px}
+ .les b{font-size:15px}
+ .les .t{font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -59,6 +81,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     <div class="sub" id="sub"></div>
   </div>
   <div class="scroll"><table id="tbl"></table></div>
+  <div id="cards"></div>
   <div class="nav">
     <button id="prev">← Пред. неделя</button>
     <button id="cur">Сегодня</button>
@@ -153,11 +176,24 @@ function render(){
       const dayT=start+d*DAY, off=dayT<START||dayT>END;
       const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
       h+=`<td class="${isCur&&d===todayIdx?"today":""}${off?" off":""}">`+(ls.length?ls.map(l=>
-        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">ауд. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
+        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
     }
     h+="</tr>";
   }
   document.getElementById("tbl").innerHTML=h+"</tbody>";
+  let cs="";
+  for(let d=0;d<5;d++){
+    const dayT=start+d*DAY, off=dayT<START||dayT>END;
+    let body="";
+    for(let p=1;p<=5;p++){
+      const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
+      if(!ls.length)continue;
+      const br=G[gk(d)].rows.find(r=>r[0]===String(p));
+      body+=`<div class="cp"><div class="ct"><b>${p} пара</b><span>${br?br[1]:""}</span></div>`+ls.map(l=>`<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join("")+"</div>";
+    }
+    cs+=`<div class="dc${isCur&&d===todayIdx?" today":""}${off?" off":""}"><div class="dh2"><b>${DAYS[d]}</b><span>${fmt(dayT)}</span></div>${body||'<div class="empty">Занятий нет</div>'}</div>`;
+  }
+  document.getElementById("cards").innerHTML=cs;
 }
 document.getElementById("prev").onclick=()=>{if(week>1){week--;render()}};
 document.getElementById("next").onclick=()=>{if(week<maxWeek){week++;render()}};
