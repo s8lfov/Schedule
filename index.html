@@ -70,6 +70,13 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
  .les b{font-size:15px}
  .les .t{font-size:13px}
 }
+td.hol{text-align:center;vertical-align:middle;background:var(--hl)}
+.hb{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px}
+.hb .hi{font-size:28px}
+.hb b{font-size:15px}
+.seeb{margin-top:6px;background:var(--accent);color:#fff;border-color:var(--accent);font-size:13px;padding:8px 12px}
+.seeb:hover{opacity:.9}
+.dc .hb{padding:6px 0}
 </style>
 </head>
 <body>
@@ -89,6 +96,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     <button id="bells">🔔 Звонки</button>
   </div>
   <dialog id="dlg"><div class="dh"><b>🔔 Расписание звонков</b><button id="x">✕</button></div><div class="tabs" id="tabs"></div><div id="bc"></div></dialog>
+  <dialog id="dlg2"><div class="dh"><b id="h2t"></b><button id="x2">✕</button></div><div id="h2c"></div></dialog>
 </div>
 <script>
 const DAYS=["Понедельник","Вторник","Среда","Четверг","Пятница"];
@@ -174,6 +182,12 @@ function render(){
     h+=`<tr><td class="n">${p}</td>`;
     for(let d=0;d<5;d++){
       const dayT=start+d*DAY, off=dayT<START||dayT>END;
+      const hol=HOL[iso(dayT)];
+      if(hol){
+        if(p===1){const n=L.some(l=>l[1]===d&&l.w.has(week));
+          h+=`<td rowspan="5" class="hol${isCur&&d===todayIdx?" today":""}">${holBox(hol,d,n)}</td>`;}
+        continue;
+      }
       const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
       h+=`<td class="${isCur&&d===todayIdx?"today":""}${off?" off":""}">`+(ls.length?ls.map(l=>
         `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
@@ -184,10 +198,12 @@ function render(){
   let cs="";
   for(let d=0;d<5;d++){
     const dayT=start+d*DAY, off=dayT<START||dayT>END;
+    const hol=HOL[iso(dayT)];
     let body="";
+    if(hol)body=holBox(hol,d,L.some(l=>l[1]===d&&l.w.has(week)));
     for(let p=1;p<=5;p++){
       const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
-      if(!ls.length)continue;
+      if(!ls.length||hol)continue;
       const br=G[gk(d)].rows.find(r=>r[0]===String(p));
       body+=`<div class="cp"><div class="ct"><b>${p} пара</b><span>${br?br[1]:""}</span></div>`+ls.map(l=>`<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join("")+"</div>";
     }
@@ -235,6 +251,29 @@ document.getElementById("bells").onclick=()=>{bsel=todayIdx<5?todayIdx:0;renderB
 document.getElementById("x").onclick=()=>dlg.close();
 dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
 document.getElementById("tabs").onclick=e=>{const i=e.target.dataset.i;if(i===undefined)return;bsel=i==="all"?"all":+i;renderBells()};
+// ===== Праздники (производственный календарь РФ 2026, сентябрь–декабрь) =====
+const iso=t=>new Date(t).toISOString().slice(0,10);
+const HOL={"2026-11-04":"День народного единства","2026-12-31":"Выходной день (перенос с 4 января)"};
+function holBox(name,d,has){
+  return `<div class="hb"><div class="hi">🎉</div><b>Занятий нет — праздник</b><div class="t">${name}</div>${has?`<button class="seeb" data-d="${d}">Увидеть расписание на этот день</button>`:""}</div>`;
+}
+const dlg2=document.getElementById("dlg2");
+function openHol(d){
+  const dayT=mon1+(week-1)*7*DAY+d*DAY;
+  document.getElementById("h2t").textContent=DAYS[d]+", "+fmt(dayT);
+  let c=`<div class="t" style="margin-bottom:10px">В этот день занятий нет из-за праздника. Пары, которые должны были быть:</div>`;
+  for(let p=1;p<=5;p++){
+    const ls=L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
+    if(!ls.length)continue;
+    const br=G[gk(d)].rows.find(r=>r[0]===String(p));
+    c+=`<div class="cp"><div class="ct"><b>${p} пара</b><span>${br?br[1]:""}</span></div>`+ls.map(l=>`<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join("")+"</div>";
+  }
+  document.getElementById("h2c").innerHTML=c;
+  dlg2.showModal();
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".seeb");if(b)openHol(+b.dataset.d)});
+document.getElementById("x2").onclick=()=>dlg2.close();
+dlg2.addEventListener("click",e=>{if(e.target===dlg2)dlg2.close()});
 render();
 </script>
 </body>
