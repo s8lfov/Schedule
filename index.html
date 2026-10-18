@@ -154,7 +154,7 @@ function render(){
       const dayT=start+d*DAY, off=dayT<START||dayT>END;
       const ls=off?[]:L.filter(l=>l[0]===p&&l[1]===d&&l.w.has(week));
       h+=`<td class="${isCur&&d===todayIdx?"today":""}${off?" off":""}">`+(ls.length?ls.map(l=>
-        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">ауд. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
+        `<div class="les"><b>${l[2]}</b>${l[3]?`<span class="r">каб. ${l[3]}</span>`:""}<div class="t">${l[5]}</div></div>`).join(""):`<div class="empty">—</div>`)+"</td>";
     }
     h+="</tr>";
   }
