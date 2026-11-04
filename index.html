@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: https://raw.githubusercontent.com; connect-src https://raw.githubusercontent.com https://api.github.com; form-action 'none'; base-uri 'none'">
-<title>Расписание ИВ 234</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236d28d9'/%3E%3Ctext x='50' y='46' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3EIV%3C/text%3E%3Ctext x='50' y='84' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3E234%3C/text%3E%3C/svg%3E">
-<style>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: https://raw.githubusercontent.com; connect-src https://raw.githubusercontent.com https://api.github.com; form-action 'none'; base-uri 'none'">
+    <title>Расписание ИВ 234</title>
+    <link rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%236d28d9'/%3E%3Ctext x='50' y='46' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3EIV%3C/text%3E%3Ctext x='50' y='84' text-anchor='middle' font-family='system-ui,Arial,sans-serif' font-weight='700' font-size='38' fill='white'%3E234%3C/text%3E%3C/svg%3E">
+    <style>
 :root,:root[data-theme="light"]{--bg:#FDF4E3;--card:#f7e4d6;--text:#241d18;--muted:#57493f;--line:#e2cfc0;--accent:#f47d52;--accent-ink:#c9531f;--hl:#f9e3d3;--glass:rgba(5,5,5,.72);--gl1:rgba(255,255,255,.14);--gl2:rgba(255,255,255,.03);--glt:rgba(244,125,82,.12);--gstroke:rgba(70,40,25,.85);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 :root[data-theme="dark"]{--bg:#14161c;--card:#1d2029;--text:#eceef4;--muted:#9aa1b3;--line:#313644;--accent:#8b5cf6;--accent-ink:#8b5cf6;--hl:#2d2442;--glass:rgba(34,36,50,.55);--gl1:rgba(255,255,255,.16);--gl2:rgba(255,255,255,.04);--glt:rgba(167,139,250,.24);--gstroke:rgba(255,255,255,.85)}
 :root[data-theme="light"] .top button,:root[data-theme="light"] .nav button,:root[data-theme="light"] .fab,:root[data-theme="light"] .scroll,:root[data-theme="light"] .dc,:root[data-theme="light"] dialog,:root[data-theme="light"] #menu,:root[data-theme="light"] #notice,:root[data-theme="light"] #toTop{color:#f4efe9}
@@ -27,7 +30,7 @@
 :root[data-theme="light"] dialog .bt tr.cur td{color:#fff}
 :root[data-theme="light"] dialog button,:root[data-theme="light"] dialog .tabs button{color:#241d18}
 :root[data-theme="light"] dialog .tabs button.on{color:#fff}
-:root[data-theme="light"] dialog input,:root[data-theme="light"] dialog select,:root[data-theme="light"] dialog textarea{color:#f4efe9}
+:root[data-theme="light"] dialog input,:root[data-theme="light"] dialog select,:root[data-theme="light"] dialog textarea{color:#111; border: 1px var(--line); border-radius: 10px; height: 35px; padding-left: 6px;}
 :root[data-theme="light"] dialog .am{color:#f89a6f}
 :root[data-theme="light"] .seeb{color:#f4efe9}
 :root[data-theme="light"] .cp.now{color:#241d18}
@@ -182,44 +185,59 @@ th.today{position:relative}
 #notice span{flex:1 1 220px}
 #notice button{padding:6px 12px}
 </style>
-</head>
-<body>
-<div class="wrap">
-  <div class="top">
-    <div class="mwrap">
-      <button id="hamb" aria-label="Меню" aria-expanded="false">☰</button>
-      <div id="menu" hidden>
-        <button id="bells">🔔 Звонки</button>
-        <button id="mybtn">✏ Мои правки</button>
-        <button id="newsbtn">📣 Что нового</button>
-        <button id="notifbtn" hidden>🔔 Уведомления в браузере</button>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <div class="mwrap">
+          <button id="hamb" aria-label="Меню" aria-expanded="false">☰</button>
+          <div id="menu" hidden>
+            <button id="bells">🔔 Звонки</button>
+            <button id="mybtn">✏ Мои правки</button>
+            <button id="newsbtn">📣 Что нового</button>
+            <button id="notifbtn" hidden>🔔 Уведомления в браузере</button>
+          </div>
+        </div>
+        <div class="topr"><button id="themebtn"
+            aria-label="Переключить тему">🌙</button><button id="admbtn"
+            style="display:none">⚙ Админ</button></div>
       </div>
+      <div id="notice" hidden></div>
+      <div class="hero">
+        <div class="num" id="num">–</div>
+        <small>Учебная неделя</small>
+        <div class="lbl" id="range"></div>
+        <div class="sub" id="sub"></div>
+      </div>
+      <div class="scroll"><table id="tbl"></table></div>
+      <div id="cards"></div>
+      <div class="nav">
+        <button id="prev">← Пред. неделя</button>
+        <button id="cur">Сегодня</button>
+        <button id="next">След. неделя →</button>
+      </div>
+      <dialog id="dlg"><div class="dh"><b>🔔 Расписание звонков</b><button
+            id="x">✕</button></div><div class="tabs" id="tabs"></div><div
+          id="bc"></div></dialog>
+      <button id="toTop" aria-label="Наверх"><svg viewBox="0 0 24 24" width="22"
+          height="22" fill="none" stroke="currentColor" stroke-width="2.6"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg></button>
+      <dialog id="dlgB"><div class="dh"><b id="bh">🔔 Звонки на день</b><button
+            id="xb">✕</button></div><div id="bcedit"></div><div
+          class="ar"><button class="seeb"
+            id="saveDayBells">Сохранить</button><button id="resetDayBells">По
+            умолчанию</button></div></dialog>
+      <dialog id="dlgF"><div class="dh"><b id="fh">📎 Вложения</b><button
+            id="xf">✕</button></div><div id="fc"></div></dialog>
+      <dialog id="dlgN"><div class="dh"><b>📣 Что нового</b><button
+            id="xn">✕</button></div><div id="nc"></div></dialog>
+      <dialog id="dlgA"><div class="dh"><b id="ath">⚙ Админ-панель</b><button
+            id="xa">✕</button></div><div id="ac"></div></dialog>
+      <dialog id="dlg2"><div class="dh"><b id="h2t"></b><button
+            id="x2">✕</button></div><div id="h2c"></div></dialog>
     </div>
-    <div class="topr"><button id="themebtn" aria-label="Переключить тему">🌙</button><button id="admbtn" style="display:none">⚙ Админ</button></div>
-  </div>
-  <div id="notice" hidden></div>
-  <div class="hero">
-    <div class="num" id="num">–</div>
-    <small>Учебная неделя</small>
-    <div class="lbl" id="range"></div>
-    <div class="sub" id="sub"></div>
-  </div>
-  <div class="scroll"><table id="tbl"></table></div>
-  <div id="cards"></div>
-  <div class="nav">
-    <button id="prev">← Пред. неделя</button>
-    <button id="cur">Сегодня</button>
-    <button id="next">След. неделя →</button>
-  </div>
-  <dialog id="dlg"><div class="dh"><b>🔔 Расписание звонков</b><button id="x">✕</button></div><div class="tabs" id="tabs"></div><div id="bc"></div></dialog>
-  <button id="toTop" aria-label="Наверх"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-  <dialog id="dlgB"><div class="dh"><b id="bh">🔔 Звонки на день</b><button id="xb">✕</button></div><div id="bcedit"></div><div class="ar"><button class="seeb" id="saveDayBells">Сохранить</button><button id="resetDayBells">По умолчанию</button></div></dialog>
-  <dialog id="dlgF"><div class="dh"><b id="fh">📎 Вложения</b><button id="xf">✕</button></div><div id="fc"></div></dialog>
-  <dialog id="dlgN"><div class="dh"><b>📣 Что нового</b><button id="xn">✕</button></div><div id="nc"></div></dialog>
-  <dialog id="dlgA"><div class="dh"><b id="ath">⚙ Админ-панель</b><button id="xa">✕</button></div><div id="ac"></div></dialog>
-  <dialog id="dlg2"><div class="dh"><b id="h2t"></b><button id="x2">✕</button></div><div id="h2c"></div></dialog>
-</div>
-<script>
+    <script>
 const DAYS=["Понедельник","Вторник","Среда","Четверг","Пятница"];
 const L=[
 [1,0,"Физ.культура","","4,6,8,13-15","Волков В.В."],
@@ -861,10 +879,17 @@ document.getElementById("notice").addEventListener("click",e=>{
 }
 
 const CHANGES=[
- {d:"",t:"Раздельные звонки и админка",i:["Звонки для вторника, среды и пятницы теперь разделены и настраиваются отдельно","Админ-панель скрыта для обычных пользователей и появляется только после входа или по ссылке #admin","Добавлена кнопка выхода из админ-учетки во вкладке Данные","Улучшена синхронизация с Android-приложением"]}
+ {d:"04.11.2026",t:"Новая светлая тема и звонки по дням",i:["Добавлена светлая тема с акцентным цветом", "Добавлено переключение тёмной и светлой темы, тема также выбирается автоматически по настройкам браузера", "В светлой теме обновлены стекло, фоновые градиенты и читаемость текста", "В мобильной версии текущая пара выделена как на десктопе, а следующая пара получила эффект Liquid Glass", "Добавлена возможность изменить расписание звонков для отдельного дня", "Админы могут изменить звонки, нажав на заголовок нужного дня", "Обычные пользователи могут изменить звонки для дня через раздел «Мои правки»", "Улучшена читаемость времени пар, номеров пар и праздничных дней"
+ ]},
+ {d:"02.11.2026",t:"Раздельные звонки и админка",i:[
+  "Звонки для вторника, среды и пятницы теперь разделены и настраиваются отдельно",
+  "Админ-панель скрыта для обычных пользователей",
+  "Добавлена кнопка выхода из админ-учетки во вкладке Данные",
+  "Улучшена синхронизация с Android-приложением"
+ ]}
 ];
 document.getElementById("newsbtn").onclick=()=>{
-  document.getElementById("nc").innerHTML=CHANGES.map((c,k)=>`<div class="ap lat"><b>${esc(c.t)}</b><ul>${c.i.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
+    document.getElementById("nc").innerHTML=CHANGES.map((c,k)=>(k===1?'<div class="bh">Ранее</div>':"")+`<div class="ap${k?"":" lat"}"><b>${k?"":"Последнее обновление · "}${esc(c.t)}</b>${c.d?` <span class="t">${esc(c.d)}</span>`:""}<ul>${c.i.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
   document.getElementById("dlgN").showModal();
 };
 document.getElementById("xn").onclick=()=>document.getElementById("dlgN").close();
@@ -945,5 +970,5 @@ dlgB.addEventListener("click",e=>{if(e.target===dlgB)dlgB.close()});
 
 render();
 </script>
-</body>
+  </body>
 </html>
