@@ -109,7 +109,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 .dc.today .dh2 b{color:var(--accent-ink)}
 .cp{padding:8px 0;border-top:1px solid var(--line)}
 .ct{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
-.ct b{color:var(--text)}
+.ct b{color:var(#fff)}
 @media (max-width:760px){
  body{padding:12px 10px 32px}
  .scroll{display:none}
@@ -404,7 +404,7 @@ function openHol(d){
   for(let p=1;p<=5;p++){
     const ls=baseLessons(p,d,mon1+(week-1)*7*DAY+d*DAY);
     if(!ls.length)continue;
-    const br=bellsFor(t,d).find(r=>r[0]===String(p));
+    const br=G[gk(d)].rows.find(r=>r[0]===String(p));
     c+=`<div class="cp"><div class="ct"><b>${p} пара</b><span>${br?esc(br[1]):""}</span></div>`+ls.map(l=>`${lesHtml(l)}`).join("")+"</div>";
   }
   document.getElementById("h2c").innerHTML=c;
